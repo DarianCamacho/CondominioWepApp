@@ -11,6 +11,7 @@ namespace CondominioWepApp.Models
         public string? Vehicle { get; set; }
         public string? Items { get; set; }
         public string? Date { get; set; }
+        public string? UserName { get; set; }
     }
 
     public class DeliverysHandler
@@ -32,13 +33,14 @@ namespace CondominioWepApp.Models
                     Vehicle = data["Vehicle"].ToString(),
                     Items = data["Items"].ToString(),
                     Date = data["Date"].ToString(),
+                    UserName = data["UserName"].ToString()
                 });
             }
 
             return deliverysList;
         }
 
-        public async Task<bool> Create(string deliveryId , string vehicle, string items, string date)
+        public async Task<bool> Create(string deliveryId , string vehicle, string items, string date, string userName)
         {
             try
             {
@@ -49,7 +51,8 @@ namespace CondominioWepApp.Models
                                     { "DeliveryId", deliveryId },
                                     { "Items", items },
                                     { "Vehicle", vehicle },
-                                    { "Date", date }
+                                    { "Date", date },
+                                    { "UserName", userName } // Agrega el nombre de usuario
                          });
 
                 return true;

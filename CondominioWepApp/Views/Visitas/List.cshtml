@@ -9,16 +9,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $("#myInput").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-    </script>
-    <script>
         function showEditForm(VisitId, cedula, name, vehicle, brand, model, color, date) {
             // Completa los campos del formulario con los datos de la tarjeta
             document.getElementById('edit-VisitId').value = VisitId;
@@ -54,68 +44,73 @@
         <input class="form-control" id="myInput" type="text" placeholder="Search..">
     </div>
     <p></p>
-    @foreach (var @item in @ViewBag.Visits)
+   @foreach (var @item in @ViewBag.Visits)
     {
-        <div class="searching" data-search="@item.Name @item.Cedula @item.Brand @item.Model @item.Vehicle @item.Color @item.Date">
-            <div class="centered-container">
-                <div class="content-box">
-                    <div class="card">
-                        <div class="card mb-3">
-                            <h3 class="card-header">Visita</h3>
-                            <svg href="" class="d-block user-select-none" width="100%" height="50" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
-                                <rect width="100%" height="100%" fill="#868e96"></rect>
-                                <text x="50%" y="50%" fill="#dee2e6" dy=".3em">@item.Id</text>
-                            </svg>
-                            <div class="card-body">
-                                <h5 class="card-title">Nombre</h5>
-                                <h6 class="card-subtitle text-muted">@item.Name</h6>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-text">Cedula</h5>
-                                <p class="card-title">@item.Cedula</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">@item.Brand</li>
-                                <li class="list-group-item">@item.Model</li>
-                                <li class="list-group-item">@item.Vehicle</li>
-                                <li class="list-group-item">@item.Color</li>
-                            </ul>
-                            <div class="options">
-                                <div class="option">
-                                    <button class="btn btn-warning mr-2 edit-button" onclick="showEditForm('@item.Id', '@item.Cedula', '@item.Name', '@item.Vehicle', '@item.Brand', '@item.Model', '@item.Color', '@item.Date')">Editar</button>
+        @if (@item.UserName == @ViewBag.User.Name)
+        {
+            <div class="searching" data-search="@item.Name @item.Cedula @item.Brand @item.Model @item.Vehicle @item.Color @item.Date">
+                <div class="centered-container">
+                    <div class="content-box">
+                        <div class="card">
+                            <div class="card border-secondary mb-3">
+                                <h3 class="card-header">Visita</h3>
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+
+                                    </li>
+                                </ul>
+                                <div class="card-body">
+                                    <h5 class="card-title">Nombre</h5>
+                                    <h6 class="card-subtitle text-muted">@item.Name</h6>
                                 </div>
-                                <div class="option">
-                                    <form id="deleteForm-@item.Cedula" asp-controller="Visitas" asp-action="Delete" asp-route-visitId="@item.Id" method="post">
-                                        <a type="submit" value="Delete" class="btn btn-danger delete-button" href="#">Delete</a>
-                                    </form>
+                                <div class="card-body">
+                                    <h5 class="card-text">Cedula</h5>
+                                    <p class="card-title">@item.Cedula</p>
                                 </div>
-                            </div>
-                            <div class="card-footer text-muted">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-week" viewBox="0 0 16 16">
-                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
-                                    <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5zM11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
-                                </svg>
-                                @item.Date
-                            </div>
-                        </div>
-                        <!-- Modal de Confirmación de Eliminación -->
-                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirma para eliminar</h5>
-                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">@item.Brand</li>
+                                    <li class="list-group-item">@item.Model</li>
+                                    <li class="list-group-item">@item.Vehicle</li>
+                                    <li class="list-group-item">@item.Color</li>
+                                    @* <li class="list-group-item">@item.UserName</li> *@
+                                </ul>
+                                <div class="options">
+                                    <div class="option">
+                                        <button class="btn btn-dark mr-2 edit-button" onclick="showEditForm('@item.Id', '@item.Cedula', '@item.Name', '@item.Vehicle', '@item.Brand', '@item.Model', '@item.Color', '@item.Date')">Editar</button>
                                     </div>
-                                    <div class="modal-body">
-                                        ¿Estás seguro de que deseas eliminar esta visita?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                        <form asp-controller="Visitas" asp-action="Delete" asp-route-visitId="@item.Id" method="post">
-                                            <input type="submit" value="Sí, Eliminar" class="btn btn-danger" />
+                                    <div class="option">
+                                        <form id="deleteForm-@item.Cedula" asp-controller="Visitas" asp-action="Delete" asp-route-visitId="@item.Id" method="post">
+                                            <a type="submit" value="Delete" class="btn btn-danger delete-button" href="#">Delete</a>
                                         </form>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-week" viewBox="0 0 16 16">
+                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
+                                        <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5zM11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
+                                    </svg>
+                                    @item.Date
+                                </div>
+                            </div>
+                            <!-- Modal de Confirmación de Eliminación -->
+                            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirma para eliminar</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            ¿Estás seguro de que deseas eliminar esta visita?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                            <form asp-controller="Visitas" asp-action="Delete" asp-route-visitId="@item.Id" method="post">
+                                                <input type="submit" value="Sí, Eliminar" class="btn btn-danger" />
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -123,8 +118,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <p></p>
+            <p></p>
+        }
     }
     <div class="centered-container">
         <div id="edit-form-container" style="display: none;">

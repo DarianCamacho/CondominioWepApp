@@ -13,7 +13,7 @@ namespace CondominioWepApp.Models
         public string? Brand { get; set; }
         public string? Model { get; set; }
         public string? Color { get; set; }
-        public string? Date { get; set; }
+        public string? UserName { get; set; }
     }
 
     public class FavoritesHandler
@@ -36,15 +36,15 @@ namespace CondominioWepApp.Models
                     Vehicle = data["Vehicle"].ToString(),
                     Brand = data["Brand"].ToString(),
                     Model = data["Model"].ToString(),
-                    Color = data["Color"].ToString(),
-                    Date = data["Date"].ToString(),
+                    UserName = data["UserName"].ToString(),
+                    Color = data["Color"].ToString()
                 });
             }
 
             return favoritesList;
         }
 
-        public async Task<bool> Create(string cedula, string name, string vehicle, string brand, string model, string color, string date)
+        public async Task<bool> Create(string cedula, string name, string vehicle, string brand, string model, string color, string userName)
         {
             try
             {
@@ -58,8 +58,33 @@ namespace CondominioWepApp.Models
                                     { "Brand",  brand },
                                     { "Model", model },
                                     { "Color", color },
-                                    { "Date", date }
+                                    { "UserName", userName } // Agrega el nombre de usuario
                          });
+
+                return true;
+            }
+            catch (FirebaseStorageException ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> Edit(string id, string cedula, string name, string vehicle, string brand, string model, string color)
+        {
+            try
+            {
+                FirestoreDb db = FirestoreDb.Create(FirebaseAuthHelper.firebaseAppId);
+                DocumentReference docRef = db.Collection("Favorites").Document(id);
+                Dictionary<string, object> dataToUpdate = new Dictionary<string, object>
+                {
+                    { "Cedula", cedula },
+                    { "Name", name },
+                    { "Vehicle", vehicle },
+                    { "Brand",  brand },
+                    { "Model", model },
+                    { "Color", color },
+                };
+                WriteResult result = await docRef.UpdateAsync(dataToUpdate);
 
                 return true;
             }

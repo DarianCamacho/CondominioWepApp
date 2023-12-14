@@ -39,7 +39,7 @@ namespace CondominioWepApp.Controllers
                 return RedirectToAction("Index", "Admin");
             }
             //Muestra el get en la vista
-            return GetVisits();
+            return View();
         }
 
         public IActionResult GetUserName()
@@ -92,20 +92,42 @@ namespace CondominioWepApp.Controllers
             return View();
         }
 
-        // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(string cedula, string name, string vehicle, string brand, string model, string color, string date, int acceso)
         {
             try
             {
+                // Obtiene el usuario actual de la sesión
+                Models.User? user = JsonConvert.DeserializeObject<Models.User>(HttpContext.Session.GetString("userSession"));
+
+                // Verifica si el usuario es nulo (no debería ocurrir si la sesión está configurada correctamente)
+                if (user == null)
+                {
+                    // Manejar el escenario donde el usuario no está autenticado
+                    // Puedes redirigir a una página de error u otra acción apropiada
+                    return RedirectToAction("Index", "Error");
+                }
+
+                // Obtiene el nombre de usuario del objeto User
+                string userName = user.Name;
+
+                // Verifica que la fecha no sea anterior a la fecha actual
+                DateTime selectedDate = DateTime.Parse(date);
+                if (selectedDate < DateTime.Now.Date)
+                {
+                    // Puedes agregar un mensaje de error o manejar de alguna otra manera
+                    ViewBag.Error = "La fecha seleccionada no puede ser anterior al día de hoy.";
+                    return View("Error");
+                }
+
                 VisitsHandler visitsHandler = new VisitsHandler();
 
-                bool result = visitsHandler.Create(cedula, name, vehicle, brand, model, color, date, acceso).Result;
+                // Pasa el nombre de usuario al método Create
+                bool result = visitsHandler.Create(cedula, name, vehicle, brand, model, color, date, acceso, userName).Result;
 
-                return GetVisits();
+                return View("Index");
             }
-
             catch (FirebaseStorageException ex)
             {
                 ViewBag.Error = new ErrorHandler()

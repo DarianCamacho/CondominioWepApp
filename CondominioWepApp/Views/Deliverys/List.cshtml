@@ -25,75 +25,84 @@
 <body>
     <div class="centered-container">
         <div class="content-box">
+            <a asp-controller="Deliverys" asp-action="Index" class="btn btn-primary">Volver</a>
+            <p></p>
+            <div class="card-header">
+                <input class="form-control" id="myInput" type="text" placeholder="Search..">
+            </div>
+            <p></p>
+            @foreach (var @item in @ViewBag.Deliverys)
+            {
+                <div class="searching" data-search="@item.DeliveryId @item.Vehicle @item.Items @item.Date">
                     <div class="card">
-                        <div class="card-header">
-                            <input class="form-control" id="myInput" type="text" placeholder="Search..">
-                        </div>
-                        @foreach (var @item in @ViewBag.Deliverys)
-                        {
-                            <div class="card mb-3">
-                                <h3 class="card-header"><i class="bi bi-basket-fill"></i></h3>
-                                <svg href="" class="d-block user-select-none" width="100%" height="50" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
-                                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                                    <text x="50%" y="50%" fill="#dee2e6" dy=".3em">@item.Id</text>
+
+                        <div class="card mb-3">
+                            <h3 class="card-header"><i class="bi bi-basket-fill"></i></h3>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr class="table-success">
+                                        <th scope="row">Delivery</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <div class="card-body">
+                                <h5 class="card-title">Identificación</h5>
+                                <h6 class="card-subtitle text-muted">@item.DeliveryId</h6>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Vehículo: @item.Vehicle</li>
+                                <li class="list-group-item">Ítems: @item.Items</li>
+                            </ul>
+                            <div class="options">
+                                <div class="option">
+                                    <form id="deleteForm-@item.DeliveryId" asp-controller="Deliverys" asp-action="Delete" asp-route-delyId="@item.Id" method="post">
+                                        <a type="submit" value="Delete" class="btn btn-danger delete-button" href="#">Delete</a>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-week" viewBox="0 0 16 16">
+                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
+                                    <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5zM11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
                                 </svg>
-                                <div class="card-body">
-                                    <h5 class="card-title">Delivery</h5>
-                                    <h6 class="card-subtitle text-muted">@item.DeliveryId</h6>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">@item.Vehicle</li>
-                                    <li class="list-group-item">@item.Items</li>
-                                    <li class="list-group-item">@item.Date</li>
-                                </ul>
-                                <div class="options">
-                            <div class="option">
-                                <form id="deleteForm-@item.DeliveryId" asp-controller="Deliverys" asp-action="Delete" asp-route-delyId="@item.Id" method="post">
-                                    <a type="submit" value="Delete" class="btn btn-danger delete-button" href="#">Delete</a>
-                                </form>
+                                @item.Date
                             </div>
-                                </div>
-                                <div class="card-footer text-muted">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-week" viewBox="0 0 16 16">
-                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" />
-                                        <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5zM11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-5 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z" />
-                                    </svg>
-                                    @item.Date
-                                </div>
-                            </div>
-                            <!-- Modal de Confirmación de Eliminación -->
-                            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirma para eliminar</h5>
-                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            ¿Estás seguro de que deseas eliminar esta visita?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                            <form asp-controller="Deliverys" asp-action="Delete" asp-route-delyId="@item.Id" method="post">
-                                                <input type="submit" value="Sí, Eliminar" class="btn btn-danger" />
-                                            </form>
-                                        </div>
+                        </div>
+                        <!-- Modal de Confirmación de Eliminación -->
+                        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirma para eliminar</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        ¿Estás seguro de que deseas eliminar este pedido?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                        <form asp-controller="Deliverys" asp-action="Delete" asp-route-delyId="@item.Id" method="post">
+                                            <input type="submit" value="Sí, Eliminar" class="btn btn-danger" />
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        }
+                        </div>
                     </div>
                 </div>
-             </div>
-         </div>
-        <p></p>
-        <div>
-            <button id="myButton" class="Mybutton" data-url="/Delivery/Index">
-                Volver
-            </button>
+                <p></p>
+            }
         </div>
+    </div>
+    </div>
+    <p></p>
+    <div>
+        <button id="myButton" class="Mybutton" data-url="/Delivery/Index">
+            Volver
+        </button>
+    </div>
     </div>
 
     <script>
@@ -125,7 +134,7 @@
                 var form = $(this);
 
                 // Mostrar una ventana modal de confirmación antes de enviar el formulario
-                if (confirm("¿Estás seguro de que deseas eliminar esta visita?")) {
+                if (confirm("¿Estás seguro de que deseas eliminar este pedido?")) {
                     // Si el usuario confirma, envía el formulario
                     form.off("submit").submit();
                 }

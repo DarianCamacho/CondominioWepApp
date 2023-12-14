@@ -185,3 +185,16 @@ ion-icon {
     .Mybutton:active {
         transform: translateY(-1px);
     }
+
+
+.visits{
+    padding: 1em;
+    overflow: hidden;
+}
+
+.visit{
+    margin: 1em;
+    padding: 1em;
+    float: left;
+
+}

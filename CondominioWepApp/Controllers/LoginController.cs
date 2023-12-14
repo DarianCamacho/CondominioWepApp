@@ -79,6 +79,10 @@ namespace CondominioWepApp.Controllers
                 {
                     return RedirectToAction("Index", "Security");
                 }
+                else if (user.Role == 1)
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
                 else
                 {
                     if (user.Role == 3)

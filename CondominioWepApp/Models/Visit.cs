@@ -17,6 +17,7 @@ namespace CondominioWepApp.Models
         public string? Color { get; set; }
         public string? Date { get; set; }
         public int? Acceso { get; set; }
+        public string? UserName { get; set; }
     }
 
 
@@ -43,6 +44,7 @@ namespace CondominioWepApp.Models
                     Model = data["Model"].ToString(),
                     Color = data["Color"].ToString(),
                     Date = data["Date"].ToString(),
+                    UserName = data["UserName"].ToString(),
                     Acceso = Convert.ToInt16(data["Acceso"])
                 });
             }
@@ -50,23 +52,24 @@ namespace CondominioWepApp.Models
             return visitsList;
         }
 
-        public async Task<bool> Create(string cedula, string name, string vehicle, string brand, string model, string color, string date, int acceso)
+        public async Task<bool> Create(string cedula, string name, string vehicle, string brand, string model, string color, string date, int acceso, string userName)
         {
             try
             {
                 DocumentReference addedDocRef =
-                 await FirestoreDb.Create(FirebaseAuthHelper.firebaseAppId)
-                     .Collection("Visits").AddAsync(new Dictionary<string, object>
-                         {
-                                    { "Cedula", cedula },
-                                    { "Name", name },
-                                    { "Vehicle", vehicle },
-                                    { "Brand",  brand },
-                                    { "Model", model },
-                                    { "Color", color },
-                                    { "Date", date },
-                                    { "Acceso", acceso }
-                         });
+                    await FirestoreDb.Create(FirebaseAuthHelper.firebaseAppId)
+                        .Collection("Visits").AddAsync(new Dictionary<string, object>
+                        {
+                            { "Cedula", cedula },
+                            { "Name", name },
+                            { "Vehicle", vehicle },
+                            { "Brand",  brand },
+                            { "Model", model },
+                            { "Color", color },
+                            { "Date", date },
+                            { "Acceso", acceso },
+                            { "UserName", userName } // Agrega el nombre de usuario
+                        });
 
                 return true;
             }

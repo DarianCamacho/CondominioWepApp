@@ -35,7 +35,6 @@ namespace CondominioWepApp.Controllers
 				return RedirectToAction("Index", "Admin");
 			}
 
-			//Muestra el get en la vista
 			return View();
         }
 
@@ -72,23 +71,44 @@ namespace CondominioWepApp.Controllers
 
                 return RedirectToAction("Index", "Admin");
             }
+
             return GetDeliverys();
         }
 
-       //POST
-       [HttpPost]
-       [ValidateAntiForgeryToken]
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(string deliveryId, string vehicle, string items, string date)
         {
             try
             {
+                // Obtiene el usuario actual de la sesión
+                Models.User? user = JsonConvert.DeserializeObject<Models.User>(HttpContext.Session.GetString("userSession"));
+                if (user == null)
+                {
+                    // Manejar el escenario donde el usuario no está autenticado
+                    // Puedes redirigir a una página de error u otra acción apropiada
+                    return RedirectToAction("Index", "Error");
+                }
+
+                // Obtiene el nombre de usuario del objeto User
+                string userName = user.Name;
+
+                // Verifica que la fecha no sea anterior a la fecha actual
+                DateTime selectedDate = DateTime.Parse(date);
+                if (selectedDate < DateTime.Now.Date)
+                {
+                    // Puedes agregar un mensaje de error o manejar de alguna otra manera
+                    ViewBag.Error = "La fecha seleccionada no puede ser anterior al día de hoy.";
+                    return View("Error");
+                }
+
                 DeliverysHandler deliverysHandler = new DeliverysHandler();
 
-                bool result = deliverysHandler.Create(deliveryId, vehicle, items, date).Result;
+                bool result = deliverysHandler.Create(deliveryId, vehicle, items, date, userName).Result;
 
-                return GetDeliverys();
+                return View("Index");
             }
-
             catch (FirebaseStorageException ex)
             {
                 ViewBag.Error = new ErrorHandler()
@@ -102,7 +122,6 @@ namespace CondominioWepApp.Controllers
                 return View("ErrorHandler");
             }
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -119,7 +138,7 @@ namespace CondominioWepApp.Controllers
                 await delyDocRef.DeleteAsync();
 
                 // Redirige a la vista principal (Index) después de eliminar la tarjeta
-                return RedirectToAction("List", "Delivery");
+                return RedirectToAction("List", "Deliverys");
             }
             catch (Exception ex)
             {

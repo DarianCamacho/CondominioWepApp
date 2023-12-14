@@ -7,6 +7,7 @@ namespace CondominioWepApp.Controllers
 {
     public class SecurityController : Controller
     {
+        //Index se encarga de mostrar los condominos y seleccionarlos para trabajar en su proyecto habitacional
         public IActionResult Index()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("userSession")))
@@ -148,7 +149,7 @@ namespace CondominioWepApp.Controllers
                 return View("ErrorHandler");
             }
         }
-
+        //View se encarga de mostrar el condomino seleccionado y mostrar las visitras creadas del mismo
         public IActionResult View(string id, string name, string email, string photopath, int role, string logo, string homecode, string phone, string placalibre, string cedula)
         {
             ViewBag.User = JsonConvert.DeserializeObject<Models.User>(HttpContext.Session.GetString("userSession"));
@@ -172,6 +173,5 @@ namespace CondominioWepApp.Controllers
 			//Muestra el get en la vista
 			return GetVisits();
 		}
-
     }
 }

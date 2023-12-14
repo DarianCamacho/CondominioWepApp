@@ -14,8 +14,10 @@
         $(document).ready(function () {
             $("#myInput").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                $(".searching").filter(function () {
+                    // Obtén el valor del atributo data-search de la tarjeta
+                    var searchValue = $(this).data("search").toLowerCase();
+                    $(this).toggle(searchValue.indexOf(value) > -1);
                 });
             });
         });
@@ -39,120 +41,129 @@
     </script>
 </head>
 <body>
-<div class="centered-container">
-    <div class="content-box">
-        <div class="card">
+    <div class="centered-container">
+        <div class="content-box">
             <div class="card-header">
                 <input class="form-control" id="myInput" type="text" placeholder="Search..">
             </div>
-                @foreach (var @item in @ViewBag.Users)
-                {
-                    <div class="card mb-3">
-                        <h3 class="card-header">User</h3>
-                        <fieldset disabled="">
-                            <input class="form-control" id="disabledInput" type="text" placeholder="@item.Id" disabled="">
-                        </fieldset>
-                        <img src="@item.PhotoPath" class="d-block user-select-none" width="200" height="200" alt="Image cap" />
-                        <div class="card-body">
-                            <h5 class="card-title">Nombre</h5>
-                            <h6 class="card-subtitle text-muted">@item.Name</h6>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-text">Email</h5>
-                            <p class="card-title">@item.Email</p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><strong>Role:</strong> @item.Role</li>
-                            <li class="list-group-item"><strong>Home Code:</strong> @item.HomeCode</li>
-                            <li class="list-group-item"><strong>Phone:</strong> @item.Phone</li>
-                            <li class="list-group-item"><strong>Placa Libre:</strong> @item.PlacaLibre</li>
-                            <li class="list-group-item"><strong>Cedula:</strong> @item.Cedula</li>
-                        </ul>
-                        <div class="options">
-                            <div class="option">
-                                <button class="btn btn-warning mr-2 edit-button" onclick="showEditForm1('@item.Id', '@item.Cedula', '@item.Name', '@item.Role', '@item.HomeCode', '@item.Phone', '@item.PlacaLibre')">Editar</button>
-                            </div>
-                            <div class="option">
-                                <form id="deleteForm-@item.Name" asp-controller="Admin" asp-action="Delete" asp-route-userId="@item.Id" method="post">
-                                    <a type="submit" value="Delete" class="btn btn-danger delete-button" href="#">Delete</a>
-                                </form>
-                            </div>
-                        </div>
-                        <table class="table table-hover">
-                            <thead>
-                                <tr class="table-dark">
-                                    <th scope="row"></th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+            <p></p>
+            @foreach (var @item in @ViewBag.Users)
+            {
+                <div class="searching" data-search="@item.Name @item.Email @item.Cedula @item.Role @item.HomeCode @item.Phone @item.PlacaLibre">
+                    <div class="centered-container">
+                        <div class="content-box">
+                            <div class="card">
+                                <div class="card mb-3">
+                                    <h3 class="card-header">User</h3>
+                                    <fieldset disabled="">
+                                        <input class="form-control" id="disabledInput" type="text" placeholder="@item.Id" disabled="">
+                                    </fieldset>
+                                    <img src="@item.PhotoPath" class="d-block user-select-none" width="200" height="200" alt="Image cap" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">Nombre</h5>
+                                        <h6 class="card-subtitle text-muted">@item.Name</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-text">Email</h5>
+                                        <p class="card-title">@item.Email</p>
+                                    </div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Role:</strong> @item.Role</li>
+                                        <li class="list-group-item"><strong>Home Code:</strong> @item.HomeCode</li>
+                                        <li class="list-group-item"><strong>Phone:</strong> @item.Phone</li>
+                                        <li class="list-group-item"><strong>Placa Libre:</strong> @item.PlacaLibre</li>
+                                        <li class="list-group-item"><strong>Cedula:</strong> @item.Cedula</li>
+                                    </ul>
+                                    <div class="options">
+                                        <div class="option">
+                                            <button class="btn btn-warning mr-2 edit-button" onclick="showEditForm1('@item.Id', '@item.Cedula', '@item.Name', '@item.Role', '@item.HomeCode', '@item.Phone', '@item.PlacaLibre')">Editar</button>
+                                        </div>
+                                        <div class="option">
+                                            <form id="deleteForm-@item.Name" asp-controller="Admin" asp-action="Delete" asp-route-userId="@item.Id" method="post">
+                                                <a type="submit" value="Delete" class="btn btn-danger delete-button" href="#">Delete</a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr class="table-dark">
+                                                <th scope="row"></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
 
-                    <!-- Modal de Confirmación de Eliminación -->
-                    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirma para eliminar</h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    ¿Estás seguro de que deseas eliminar este usuario?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                    <form asp-controller="Admin" asp-action="Delete" asp-route-userId="@item.Id" method="post">
-                                        <input type="submit" value="Sí, Eliminar" class="btn btn-danger" />
-                                    </form>
+                                <!-- Modal de Confirmación de Eliminación -->
+                                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirma para eliminar</h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                ¿Estás seguro de que deseas eliminar este usuario?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                <form asp-controller="Admin" asp-action="Delete" asp-route-userId="@item.Id" method="post">
+                                                    <input type="submit" value="Sí, Eliminar" class="btn btn-danger" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                }
-        </div>
-    </div>
-</div>
-<div id="edit-form-container1" style="display: none;">
-    <div class="container">
-        <h2 class="my-4">Nuevos Datos</h2>
-        <form asp-controller="Admin" asp-action="EditUser" method="post">
-            <input type="hidden" name="UserId" id="edit-UserId" value="" />
+                </div>
+                <p></p>
+            }
 
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="edit-cedula" name="cedula" required />
-                <label for="edit-cedula">Cedula:</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="edit-name" name="name" required />
-                <label for="edit-name">Nombre:</label>
-            </div>
-            <div class="form-floating mb-3">
-                <label for="edit-role">Role:</label>
-                <div class="group">
-                    <select class="form-control" id="edit-role" name="role">
-                        <option value="0">Condomino</option>
-                        <option value="1">Admin</option>
-                        <option value="2">Oficial de Seguridad</option>
-                    </select>
+            <div id="edit-form-container1" style="display: none;">
+                <div class="container">
+                    <h2 class="my-4">Nuevos Datos</h2>
+                    <form asp-controller="Admin" asp-action="EditUser" method="post">
+                        <input type="hidden" name="UserId" id="edit-UserId" value="" />
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="edit-cedula" name="cedula" required />
+                            <label for="edit-cedula">Cedula:</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="edit-name" name="name" required />
+                            <label for="edit-name">Nombre:</label>
+                        </div>
+                        <label for="edit-role">Role:</label>
+                        <div class="form-floating mb-3">
+                            <div class="form-group">
+                                <select class="form-control" id="edit-role" name="role">
+                                    <option value="0">Condomino</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Oficial de Seguridad</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="edit-homecode" name="homecode" required maxlength="5" />
+                            <label for="edit-homecode">Home Code:</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="edit-phone" name="phone" required maxlength="8" />
+                            <label for="edit-phone">Phone:</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="edit-placalibre" name="placalibre" required maxlength="6" />
+                            <label for="edit-placalibre">Placa Libre:</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
                 </div>
             </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="edit-homecode" name="homecode" required maxlength="5" />
-                <label for="edit-homecode">Home Code:</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="edit-phone" name="phone" required maxlength="8" />
-                <label for="edit-phone">Phone:</label>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="edit-placalibre" name="placalibre" required maxlength="6" />
-                <label for="edit-placalibre">Placa Libre:</label>
-            </div>
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
+        </div>
     </div>
-</div>
 
 
     <script>
