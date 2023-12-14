@@ -42,10 +42,6 @@
 											<br/>
 											<div class="d-flex justify-content-start rounded-3 p-2 mb-2"
 												 style="background-color: #efefef;">
-												<div>
-													<p class="small text-muted mb-1">Phone</p>
-													<p class="mb-0">@ViewBag.User.Phone</p>
-												</div>
 												<div class="px-3">
 													<p class="small text-muted mb-1">HomeCode</p>
 													<p class="mb-0">@ViewBag.User.HomeCode</p>
@@ -83,12 +79,8 @@
 	<br />
 	<div class="centered-container">
 		<div class="content-box" style="background-color: lightgrey">
-@* 			<form asp-controller="Profile" asp-action="EditUser">
-				<div class="form-group">
-					<label class="col-form-label mt-4" for="cedula">Id</label>
-					<input type="text" class="form-control" value="@ViewBag.Edited.Cedula" id="cedula" name="cedula" required>
-				</div>
-			</form> *@
+			<label class="form-label" for="disabledInput">NÚMERO DE TELÉFONO</label>
+			<input class="form-control" id="disabledInput" type="text" placeholder="@ViewBag.User.Phone" disabled="">
 		</div>
 	</div>
 </body>

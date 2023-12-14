@@ -85,9 +85,9 @@ namespace CondominioWepApp.Controllers
                 }
                 else
                 {
-                    if (user.Role == 3)
+                    if (user.Role == 0)
                     {
-                        //Send email only when role is 3
+                        //Send email only when role is 0
                         SmtpParams smtp = new SmtpParams
                         {
                             ReceiverEmail = taskUser.User.Info.Email,
