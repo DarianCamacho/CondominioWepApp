@@ -17,25 +17,25 @@ namespace CondominioWepApp.Controllers
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("userSession")))
                 return RedirectToAction("Index", "Error");
 
-			if (ViewBag.User is Models.User user)
-			{
-				if (user.Role != 0)
-				{
-					//Redirige a la página de error si el usuario no tiene un rol válido
+            if (ViewBag.User is Models.User user)
+            {
+                if (user.Role != 0)
+                {
+                    //Redirige a la página de error si el usuario no tiene un rol válido
 
-					return RedirectToAction("Index", "Error");
-				}
+                    return RedirectToAction("Index", "Error");
+                }
 
-				ViewBag.Role = user.Role;
-			}
-			else
-			{
-				//Redirigir a la pagina que se selecciono
+                ViewBag.Role = user.Role;
+            }
+            else
+            {
+                //Redirigir a la pagina que se selecciono
 
-				return RedirectToAction("Index", "Admin");
-			}
+                return RedirectToAction("Index", "Admin");
+            }
 
-			return View();
+            return View();
         }
 
         private IActionResult GetDeliverys()
